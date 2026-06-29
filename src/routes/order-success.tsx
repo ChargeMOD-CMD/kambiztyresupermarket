@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { CheckCircle2, Copy, MapPin, Package, Smartphone, Check } from "lucide-react";
-import { getOrders } from "@/lib/shopStore";
+import { getOrders, type Order } from "@/lib/shopStore";
 
 export const Route = createFileRoute("/order-success")({
   component: OrderSuccessPage,
@@ -12,7 +12,7 @@ function OrderSuccessPage() {
   const searchParams = new URLSearchParams(window.location.search);
   const orderId = searchParams.get("orderId");
 
-  const [order, setOrder] = useState<unknown>(null);
+  const [order, setOrder] = useState<Order | null>(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
