@@ -24,24 +24,35 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Build static site
         run: npm run build
         env:
           NITRO_PRESET: static
+          NODE_OPTIONS: "--max-old-space-size=4096"
+
+      - name: List output directory
+        run: ls -la .output/ || ls -la dist/ || echo "Checking build output..."
 
       - name: Add 404.html for SPA routing
-        run: cp .output/public/index.html .output/public/404.html
+        run: |
+          if [ -d ".output/public" ]; then
+            cp .output/public/index.html .output/public/404.html
+            echo "Using .output/public"
+          elif [ -d "dist/client" ]; then
+            cp dist/client/index.html dist/client/404.html
+            echo "Using dist/client"
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .output/public
+          path: ${{ hashFiles('.output/public/index.html') != '' && '.output/public' || 'dist/client' }}
 
   deploy:
     environment:
