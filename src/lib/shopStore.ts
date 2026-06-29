@@ -139,7 +139,7 @@ export function createMockCustomer() {
     ],
   };
   const customers = getCustomers();
-  if (!customers.find(c => c.id === mock.id)) {
+  if (!customers.find((c) => c.id === mock.id)) {
     saveCustomers([...customers, mock]);
   }
   return mock;

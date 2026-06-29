@@ -42,9 +42,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-destructive">Error</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Something went wrong</h2>
-        <p className="mt-2 text-sm text-muted-foreground break-words">
-          {error.message}
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground break-words">{error.message}</p>
         <div className="mt-6 flex justify-center gap-4">
           <button
             onClick={() => reset()}

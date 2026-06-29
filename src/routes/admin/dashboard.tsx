@@ -40,7 +40,9 @@ function AdminDashboard() {
         return orderDate >= sevenDaysAgo;
       }
       if (timeFilter === "This Month") {
-        return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
+        return (
+          orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear()
+        );
       }
       return true;
     });

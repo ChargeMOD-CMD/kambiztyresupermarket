@@ -41,10 +41,11 @@ function CheckoutPage() {
   // Address Selection State
   const hasSavedAddresses = Boolean(session?.addresses && session.addresses.length > 0);
   const [addressMode, setAddressMode] = useState<"saved" | "manual">(
-    hasSavedAddresses ? "saved" : "manual"
+    hasSavedAddresses ? "saved" : "manual",
   );
-  
-  const defaultSavedAddress = session?.addresses?.find(a => a.isDefault) || session?.addresses?.[0];
+
+  const defaultSavedAddress =
+    session?.addresses?.find((a) => a.isDefault) || session?.addresses?.[0];
   const [selectedAddressId, setSelectedAddressId] = useState<string>(defaultSavedAddress?.id || "");
 
   // Basic Address state
@@ -106,10 +107,11 @@ function CheckoutPage() {
     setIsProcessing(true);
     setTimeout(() => {
       const customer = session || createMockCustomer();
-      
-      const finalAddress = addressMode === "saved"
-        ? (session?.addresses?.find(a => a.id === selectedAddressId) || address)
-        : address;
+
+      const finalAddress =
+        addressMode === "saved"
+          ? session?.addresses?.find((a) => a.id === selectedAddressId) || address
+          : address;
 
       const order = placeOrder({
         customerId: customer.id,
@@ -204,8 +206,8 @@ function CheckoutPage() {
                         key={addr.id}
                         onClick={() => setSelectedAddressId(addr.id)}
                         className={`p-5 rounded-2xl border flex flex-col gap-2 relative overflow-hidden cursor-pointer transition-all ${
-                          selectedAddressId === addr.id 
-                            ? "border-primary bg-primary/5 shadow-[0_0_15px_rgba(var(--primary),0.2)]" 
+                          selectedAddressId === addr.id
+                            ? "border-primary bg-primary/5 shadow-[0_0_15px_rgba(var(--primary),0.2)]"
                             : "border-border/50 glass hover:bg-white/5"
                         }`}
                       >
@@ -216,7 +218,9 @@ function CheckoutPage() {
                         )}
                         <h3 className="font-bold flex items-center justify-between">
                           {addr.fullName}
-                          {selectedAddressId === addr.id && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                          {selectedAddressId === addr.id && (
+                            <CheckCircle2 className="h-5 w-5 text-primary" />
+                          )}
                         </h3>
                         <p className="text-sm text-muted-foreground">{addr.mobile}</p>
                         <p className="text-sm text-muted-foreground mt-2">
@@ -528,7 +532,7 @@ function CheckoutPage() {
                 <X className="h-4 w-4" />
               </button>
             </div>
-            
+
             <div className="p-8 flex flex-col items-center text-center">
               {selectedPayment === "UPI" && upiOption === "app" ? (
                 <>
@@ -537,7 +541,8 @@ function CheckoutPage() {
                   </div>
                   <h4 className="text-2xl font-bold mb-2">Approve on your Phone</h4>
                   <p className="text-muted-foreground mb-8">
-                    We've sent a request to your installed UPI app. Please open it and approve the payment of <strong className="text-foreground">{formatPrice(total)}</strong>.
+                    We've sent a request to your installed UPI app. Please open it and approve the
+                    payment of <strong className="text-foreground">{formatPrice(total)}</strong>.
                   </p>
                 </>
               ) : selectedPayment === "UPI" && upiOption === "id" ? (
@@ -547,9 +552,15 @@ function CheckoutPage() {
                   </div>
                   <h4 className="text-2xl font-bold mb-2">Enter UPI PIN</h4>
                   <p className="text-muted-foreground mb-6">
-                    Paying <strong className="text-foreground">{formatPrice(total)}</strong> to Kambiz Tyre Supermarket via {upiId || "your UPI ID"}.
+                    Paying <strong className="text-foreground">{formatPrice(total)}</strong> to
+                    Kambiz Tyre Supermarket via {upiId || "your UPI ID"}.
                   </p>
-                  <input type="password" placeholder="• • • • • •" className="admin-input text-center text-2xl tracking-[0.5em] font-bold w-48 mb-8" maxLength={6} />
+                  <input
+                    type="password"
+                    placeholder="• • • • • •"
+                    className="admin-input text-center text-2xl tracking-[0.5em] font-bold w-48 mb-8"
+                    maxLength={6}
+                  />
                 </>
               ) : (
                 <>
@@ -558,9 +569,15 @@ function CheckoutPage() {
                   </div>
                   <h4 className="text-2xl font-bold mb-2">Enter OTP</h4>
                   <p className="text-muted-foreground mb-6">
-                    An OTP has been sent to your registered mobile number for a payment of <strong className="text-foreground">{formatPrice(total)}</strong>.
+                    An OTP has been sent to your registered mobile number for a payment of{" "}
+                    <strong className="text-foreground">{formatPrice(total)}</strong>.
                   </p>
-                  <input type="text" placeholder="• • • • • •" className="admin-input text-center text-2xl tracking-[0.5em] font-bold w-48 mb-8" maxLength={6} />
+                  <input
+                    type="text"
+                    placeholder="• • • • • •"
+                    className="admin-input text-center text-2xl tracking-[0.5em] font-bold w-48 mb-8"
+                    maxLength={6}
+                  />
                 </>
               )}
 
@@ -577,7 +594,7 @@ function CheckoutPage() {
                   "Simulate Payment Success"
                 )}
               </button>
-              
+
               <p className="text-xs text-muted-foreground mt-6 flex items-center gap-1">
                 <ShieldCheck className="h-3 w-3" /> 256-bit Bank Grade Encryption
               </p>

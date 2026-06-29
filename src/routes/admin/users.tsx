@@ -175,8 +175,10 @@ function AdminUsers() {
         animate={{ opacity: 1, y: 0 }}
         className="glass rounded-2xl ring-1 ring-border overflow-hidden"
       >
-        {users.filter(u => {
-          const matchSearch = u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase());
+        {users.filter((u) => {
+          const matchSearch =
+            u.name.toLowerCase().includes(search.toLowerCase()) ||
+            u.email.toLowerCase().includes(search.toLowerCase());
           const matchRole = roleFilter === "All" || u.role === roleFilter;
           return matchSearch && matchRole;
         }).length === 0 ? (
@@ -186,64 +188,68 @@ function AdminUsers() {
           </div>
         ) : (
           <div className="divide-y divide-border">
-            {users.filter(u => {
-              const matchSearch = u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase());
-              const matchRole = roleFilter === "All" || u.role === roleFilter;
-              return matchSearch && matchRole;
-            }).map((user) => (
-              <div
-                key={user.id}
-                className="flex items-start gap-4 p-5 hover:bg-surface/50 transition-colors"
-              >
-                {/* Avatar */}
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary text-sm font-bold">
-                  {user.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    .toUpperCase()
-                    .slice(0, 2)}
-                </div>
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-medium text-sm">{user.name}</span>
-                    {user.role === "owner" && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-primary/15 border border-primary/25 px-2 py-0.5 text-[10px] font-bold text-primary">
-                        <Shield className="h-2.5 w-2.5" /> Owner
-                      </span>
-                    )}
-                    {session?.userId === user.id && (
-                      <span className="text-[10px] text-muted-foreground">(you)</span>
-                    )}
+            {users
+              .filter((u) => {
+                const matchSearch =
+                  u.name.toLowerCase().includes(search.toLowerCase()) ||
+                  u.email.toLowerCase().includes(search.toLowerCase());
+                const matchRole = roleFilter === "All" || u.role === roleFilter;
+                return matchSearch && matchRole;
+              })
+              .map((user) => (
+                <div
+                  key={user.id}
+                  className="flex items-start gap-4 p-5 hover:bg-surface/50 transition-colors"
+                >
+                  {/* Avatar */}
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary text-sm font-bold">
+                    {user.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase()
+                      .slice(0, 2)}
                   </div>
-                  <div className="text-xs text-muted-foreground mt-0.5">{user.email}</div>
-                  {/* Permissions */}
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {user.permissions.map((p) => (
-                      <span
-                        key={p}
-                        className="inline-flex items-center rounded-full bg-secondary border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-medium text-sm">{user.name}</span>
+                      {user.role === "owner" && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-primary/15 border border-primary/25 px-2 py-0.5 text-[10px] font-bold text-primary">
+                          <Shield className="h-2.5 w-2.5" /> Owner
+                        </span>
+                      )}
+                      {session?.userId === user.id && (
+                        <span className="text-[10px] text-muted-foreground">(you)</span>
+                      )}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-0.5">{user.email}</div>
+                    {/* Permissions */}
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {user.permissions.map((p) => (
+                        <span
+                          key={p}
+                          className="inline-flex items-center rounded-full bg-secondary border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
+                        >
+                          {PERMISSION_LABELS[p]}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Delete */}
+                  {hasPermission("users.delete") &&
+                    user.role !== "owner" &&
+                    session?.userId !== user.id && (
+                      <button
+                        onClick={() => setDeleteId(user.id)}
+                        className="flex-shrink-0 rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+                        title="Delete user"
                       >
-                        {PERMISSION_LABELS[p]}
-                      </span>
-                    ))}
-                  </div>
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    )}
                 </div>
-                {/* Delete */}
-                {hasPermission("users.delete") &&
-                  user.role !== "owner" &&
-                  session?.userId !== user.id && (
-                    <button
-                      onClick={() => setDeleteId(user.id)}
-                      className="flex-shrink-0 rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
-                      title="Delete user"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  )}
-              </div>
-            ))}
+              ))}
           </div>
         )}
       </motion.div>

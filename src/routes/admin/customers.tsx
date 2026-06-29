@@ -2,7 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { useState, useEffect } from "react";
 import { Search, UserCheck, Mail, Phone, MapPin, Eye, Pencil, Trash2, X } from "lucide-react";
-import { type Customer, getCustomers, updateCustomer, deleteCustomer, getOrders } from "@/lib/shopStore";
+import {
+  type Customer,
+  getCustomers,
+  updateCustomer,
+  deleteCustomer,
+  getOrders,
+} from "@/lib/shopStore";
 import { getSession } from "@/lib/adminStore";
 import { toast } from "sonner";
 
@@ -32,19 +38,19 @@ function AdminCustomers() {
   }, []);
 
   const filtered = customers.filter((c) => {
-    const matchSearch = 
+    const matchSearch =
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.email.toLowerCase().includes(search.toLowerCase()) ||
       c.mobile.includes(search);
-      
+
     let matchActivity = true;
     if (activityFilter !== "All") {
       const allOrders = getOrders();
-      const hasOrders = allOrders.some(o => o.customerId === c.id);
+      const hasOrders = allOrders.some((o) => o.customerId === c.id);
       if (activityFilter === "Active") matchActivity = hasOrders;
       if (activityFilter === "Inactive") matchActivity = !hasOrders;
     }
-    
+
     return matchSearch && matchActivity;
   });
 
@@ -186,7 +192,7 @@ function AdminCustomers() {
                 <X className="h-5 w-5 text-muted-foreground" />
               </button>
             </div>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium text-muted-foreground">Full Name</label>
@@ -202,7 +208,9 @@ function AdminCustomers() {
                 <input
                   type="email"
                   value={editingCustomer.email}
-                  onChange={(e) => setEditingCustomer({ ...editingCustomer, email: e.target.value })}
+                  onChange={(e) =>
+                    setEditingCustomer({ ...editingCustomer, email: e.target.value })
+                  }
                   className="admin-input mt-1"
                 />
               </div>
@@ -211,7 +219,9 @@ function AdminCustomers() {
                 <input
                   type="tel"
                   value={editingCustomer.mobile}
-                  onChange={(e) => setEditingCustomer({ ...editingCustomer, mobile: e.target.value })}
+                  onChange={(e) =>
+                    setEditingCustomer({ ...editingCustomer, mobile: e.target.value })
+                  }
                   className="admin-input mt-1"
                 />
               </div>

@@ -69,12 +69,12 @@ function AdminProducts() {
       search.trim() === "" ||
       p.name.toLowerCase().includes(search.toLowerCase()) ||
       p.brand.toLowerCase().includes(search.toLowerCase());
-      
+
     let matchStock = true;
     if (stockFilter === "In Stock") matchStock = p.inStock;
     if (stockFilter === "Out of Stock") matchStock = !p.inStock;
     if (stockFilter === "Featured") matchStock = p.featured;
-    
+
     return matchCat && matchSearch && matchStock;
   });
 

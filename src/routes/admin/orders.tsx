@@ -27,7 +27,7 @@ function AdminOrders() {
   const [statusFilter, setStatusFilter] = useState<"All" | Order["orderStatus"]>("All");
   const [dateFilter, setDateFilter] = useState("");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  
+
   const session = getSession();
   const canManage = session?.role === "owner" || session?.role === "admin";
 
@@ -47,14 +47,14 @@ function AdminOrders() {
       o.id.toLowerCase().includes(search.toLowerCase()) ||
       o.shippingAddress.fullName.toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === "All" || o.orderStatus === statusFilter;
-    
+
     let matchDate = true;
     if (dateFilter) {
       const orderDate = new Date(o.orderDate);
       const selectedDate = new Date(dateFilter);
       matchDate = orderDate.toDateString() === selectedDate.toDateString();
     }
-    
+
     return matchSearch && matchStatus && matchDate;
   });
 
@@ -91,7 +91,7 @@ function AdminOrders() {
                 type="date"
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className={`admin-input h-10 w-full bg-surface/50 text-sm ${!dateFilter ? 'text-transparent' : ''}`}
+                className={`admin-input h-10 w-full bg-surface/50 text-sm ${!dateFilter ? "text-transparent" : ""}`}
               />
               {!dateFilter && (
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground text-sm">

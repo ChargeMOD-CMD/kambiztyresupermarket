@@ -24,8 +24,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
@@ -33,7 +33,7 @@ jobs:
       - name: Build static site
         run: npm run build
         env:
-          NITRO_PRESET: static
+          NITRO_PRESET: github_pages
           NODE_OPTIONS: "--max-old-space-size=4096"
 
       - name: List output directory

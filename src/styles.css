@@ -42,8 +42,9 @@
   --shadow-elegant: 0 30px 60px -20px rgb(0 0 0 / 0.6);
 
   --gradient-primary: linear-gradient(135deg, oklch(0.72 0.2 45), oklch(0.62 0.22 35));
-  --gradient-hero: radial-gradient(ellipse at top, oklch(0.25 0.08 40 / 0.5), transparent 60%),
-                   radial-gradient(ellipse at bottom right, oklch(0.22 0.12 30 / 0.4), transparent 60%);
+  --gradient-hero:
+    radial-gradient(ellipse at top, oklch(0.25 0.08 40 / 0.5), transparent 60%),
+    radial-gradient(ellipse at bottom right, oklch(0.22 0.12 30 / 0.4), transparent 60%);
 
   --animate-spin-slow: spin-slow 20s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
@@ -83,8 +84,12 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html { scroll-behavior: smooth; }
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -94,9 +99,18 @@
       radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0.72 0.2 45 / 0.12), transparent 60%),
       radial-gradient(circle at 0% 100%, oklch(0.4 0.1 40 / 0.08), transparent 50%);
   }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
-  ::selection { background: var(--primary); color: var(--primary-foreground); }
-  
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
   /* Fix native calendar icon color on dark backgrounds */
   input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1) !important;
@@ -108,23 +122,49 @@
   }
 }
 
-@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
 }
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 30px -5px var(--primary); opacity: 0.9; }
-  50% { box-shadow: 0 0 60px 0px var(--primary); opacity: 1; }
+  0%,
+  100% {
+    box-shadow: 0 0 30px -5px var(--primary);
+    opacity: 0.9;
+  }
+  50% {
+    box-shadow: 0 0 60px 0px var(--primary);
+    opacity: 1;
+  }
 }
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 @keyframes hero-zoom {
-  0%   { transform: scale(1.08) translateX(0px); }
-  50%  { transform: scale(1.14) translateX(-12px); }
-  100% { transform: scale(1.08) translateX(0px); }
+  0% {
+    transform: scale(1.08) translateX(0px);
+  }
+  50% {
+    transform: scale(1.14) translateX(-12px);
+  }
+  100% {
+    transform: scale(1.08) translateX(0px);
+  }
 }
 
 @utility glass {
@@ -166,8 +206,13 @@
   background: var(--gradient-primary);
   color: var(--primary-foreground);
   box-shadow: var(--shadow-glow);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  &:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 0 80px -5px var(--primary); }
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 80px -5px var(--primary);
+  }
 }
 
 @utility btn-ghost-glow {
@@ -182,10 +227,15 @@
   background: color-mix(in oklab, var(--card) 50%, transparent);
   backdrop-filter: blur(12px);
   transition: all 0.25s ease;
-  &:hover { border-color: var(--primary); color: var(--primary); }
+  &:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
 }
 
-@utility section-pad { padding-block: clamp(5rem, 10vw, 9rem); }
+@utility section-pad {
+  padding-block: clamp(5rem, 10vw, 9rem);
+}
 
 @utility tag-pill {
   display: inline-flex;
@@ -203,8 +253,13 @@
 }
 
 @utility card-tilt {
-  transition: transform 0.4s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s ease;
-  &:hover { transform: translateY(-6px); box-shadow: var(--shadow-elegant); }
+  transition:
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.4s ease;
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-elegant);
+  }
 }
 
 @utility admin-input {
@@ -215,9 +270,13 @@
   padding: 0.6rem 0.875rem;
   font-size: 0.875rem;
   color: var(--color-foreground);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   outline: none;
-  &::placeholder { color: var(--color-muted-foreground); }
+  &::placeholder {
+    color: var(--color-muted-foreground);
+  }
   &:focus {
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 15%, transparent);
@@ -227,4 +286,3 @@
     color: var(--foreground);
   }
 }
-

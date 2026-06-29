@@ -1,7 +1,17 @@
 import { motion } from "framer-motion";
 import { getProducts, DEFAULT_PRODUCTS, type Product, formatPrice } from "@/lib/adminStore";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ShoppingCart, Star, Shield, Zap, Wind, CheckCircle2, Tag, Check, ExternalLink } from "lucide-react";
+import {
+  ShoppingCart,
+  Star,
+  Shield,
+  Zap,
+  Wind,
+  CheckCircle2,
+  Tag,
+  Check,
+  ExternalLink,
+} from "lucide-react";
 import { addToCart } from "@/lib/shopStore";
 import { useShop } from "@/lib/useShop";
 import { useState } from "react";
@@ -118,21 +128,24 @@ export default function FeaturedTyre() {
   const featuredProduct = getProducts().find((p) => p.featured) ||
     getProducts()[0] || { price: 4299, originalPrice: 6599 };
 
-  const accessories = getProducts().filter((p) => p.category === "Accessories").slice(0, 5);
+  const accessories = getProducts()
+    .filter((p) => p.category === "Accessories")
+    .slice(0, 5);
   // Map our Product type to the related item structure for fallback compatibility
-  const displayRelated = accessories.length > 0 
-    ? accessories.map(p => ({
-        id: p.id,
-        name: p.name,
-        price: formatPrice(p.price),
-        originalPrice: formatPrice(p.originalPrice),
-        rating: p.rating || 5.0,
-        reviews: p.reviewsCount || 0,
-        badge: p.tag || "Top Rated",
-        image: p.image,
-        desc: p.description || p.spec,
-      }))
-    : HARDCODED_RELATED;
+  const displayRelated =
+    accessories.length > 0
+      ? accessories.map((p) => ({
+          id: p.id,
+          name: p.name,
+          price: formatPrice(p.price),
+          originalPrice: formatPrice(p.originalPrice),
+          rating: p.rating || 5.0,
+          reviews: p.reviewsCount || 0,
+          badge: p.tag || "Top Rated",
+          image: p.image,
+          desc: p.description || p.spec,
+        }))
+      : HARDCODED_RELATED;
 
   const handleAddToCart = () => {
     if (!session) {

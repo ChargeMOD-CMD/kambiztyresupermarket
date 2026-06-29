@@ -120,18 +120,22 @@ export default function Products() {
               <h3 className="text-2xl font-bold">Featured Highlights</h3>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
-              {products.filter((p) => p.featured).map((p, i) => (
-                <ProductCard key={p.id} p={p} i={i} />
-              ))}
+              {products
+                .filter((p) => p.featured)
+                .map((p, i) => (
+                  <ProductCard key={p.id} p={p} i={i} />
+                ))}
             </div>
           </div>
         )}
 
         {/* Regular Products Grid */}
         <div className="mt-14 grid md:grid-cols-3 gap-6">
-          {products.filter((p) => !p.featured).map((p, i) => (
-            <ProductCard key={p.id} p={p} i={i} />
-          ))}
+          {products
+            .filter((p) => !p.featured)
+            .map((p, i) => (
+              <ProductCard key={p.id} p={p} i={i} />
+            ))}
         </div>
 
         {products.length === 0 && (

@@ -1,7 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useShop } from "@/lib/useShop";
-import { getOrders, createMockCustomer, setShopSession, updateOrderStatus, updateCustomer } from "@/lib/shopStore";
+import {
+  getOrders,
+  createMockCustomer,
+  setShopSession,
+  updateOrderStatus,
+  updateCustomer,
+} from "@/lib/shopStore";
 import { formatPrice } from "@/lib/adminStore";
 import {
   Package,
@@ -41,24 +47,24 @@ function AccountPage() {
   const handleAddAddress = (e: React.FormEvent) => {
     e.preventDefault();
     if (!session) return;
-    
+
     const addressWithId = {
       ...newAddress,
       id: `addr-${Date.now()}`,
     };
-    
+
     let updatedAddresses = [...(session.addresses || [])];
-    
+
     // If setting as default, remove default from others
     if (newAddress.isDefault) {
-      updatedAddresses = updatedAddresses.map(a => ({ ...a, isDefault: false }));
+      updatedAddresses = updatedAddresses.map((a) => ({ ...a, isDefault: false }));
     } else if (updatedAddresses.length === 0) {
       // First address is always default
       addressWithId.isDefault = true;
     }
-    
+
     updatedAddresses.push(addressWithId);
-    
+
     updateCustomer(session.id, { addresses: updatedAddresses });
     setShopSession({ ...session, addresses: updatedAddresses });
     toast.success("Address added successfully");
@@ -97,8 +103,8 @@ function AccountPage() {
           <p className="text-muted-foreground text-center mb-6">
             Sign in to view your orders, saved addresses, and profile information.
           </p>
-          <button 
-            onClick={() => window.dispatchEvent(new CustomEvent("kambiz_require_login"))} 
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent("kambiz_require_login"))}
             className="w-full btn-hero"
           >
             Sign In / Register
@@ -281,7 +287,7 @@ function AccountPage() {
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-bold">Saved Addresses</h2>
                   {!isAddingAddress && (
-                    <button 
+                    <button
                       onClick={() => setIsAddingAddress(true)}
                       className="btn-hero py-2 px-4 text-sm"
                     >
@@ -291,53 +297,123 @@ function AccountPage() {
                 </div>
 
                 {isAddingAddress && (
-                  <form onSubmit={handleAddAddress} className="p-6 rounded-2xl glass border border-border/50 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+                  <form
+                    onSubmit={handleAddAddress}
+                    className="p-6 rounded-2xl glass border border-border/50 space-y-4 animate-in fade-in zoom-in-95 duration-200"
+                  >
                     <h3 className="font-bold text-lg mb-4">Add New Address</h3>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-xs font-medium text-muted-foreground">Full Name</label>
-                        <input type="text" required value={newAddress.fullName} onChange={e => setNewAddress({...newAddress, fullName: e.target.value})} className="admin-input mt-1" />
+                        <label className="text-xs font-medium text-muted-foreground">
+                          Full Name
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={newAddress.fullName}
+                          onChange={(e) =>
+                            setNewAddress({ ...newAddress, fullName: e.target.value })
+                          }
+                          className="admin-input mt-1"
+                        />
                       </div>
                       <div>
                         <label className="text-xs font-medium text-muted-foreground">Mobile</label>
-                        <input type="tel" required value={newAddress.mobile} onChange={e => setNewAddress({...newAddress, mobile: e.target.value})} className="admin-input mt-1" />
+                        <input
+                          type="tel"
+                          required
+                          value={newAddress.mobile}
+                          onChange={(e) => setNewAddress({ ...newAddress, mobile: e.target.value })}
+                          className="admin-input mt-1"
+                        />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="text-xs font-medium text-muted-foreground">Address Line</label>
-                        <input type="text" required value={newAddress.addressLine} onChange={e => setNewAddress({...newAddress, addressLine: e.target.value})} className="admin-input mt-1" />
+                        <label className="text-xs font-medium text-muted-foreground">
+                          Address Line
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={newAddress.addressLine}
+                          onChange={(e) =>
+                            setNewAddress({ ...newAddress, addressLine: e.target.value })
+                          }
+                          className="admin-input mt-1"
+                        />
                       </div>
                       <div>
                         <label className="text-xs font-medium text-muted-foreground">City</label>
-                        <input type="text" required value={newAddress.city} onChange={e => setNewAddress({...newAddress, city: e.target.value})} className="admin-input mt-1" />
+                        <input
+                          type="text"
+                          required
+                          value={newAddress.city}
+                          onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
+                          className="admin-input mt-1"
+                        />
                       </div>
                       <div>
-                        <label className="text-xs font-medium text-muted-foreground">District</label>
-                        <input type="text" required value={newAddress.district} onChange={e => setNewAddress({...newAddress, district: e.target.value})} className="admin-input mt-1" />
+                        <label className="text-xs font-medium text-muted-foreground">
+                          District
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={newAddress.district}
+                          onChange={(e) =>
+                            setNewAddress({ ...newAddress, district: e.target.value })
+                          }
+                          className="admin-input mt-1"
+                        />
                       </div>
                       <div>
                         <label className="text-xs font-medium text-muted-foreground">State</label>
-                        <input type="text" required value={newAddress.state} onChange={e => setNewAddress({...newAddress, state: e.target.value})} className="admin-input mt-1" />
+                        <input
+                          type="text"
+                          required
+                          value={newAddress.state}
+                          onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
+                          className="admin-input mt-1"
+                        />
                       </div>
                       <div>
                         <label className="text-xs font-medium text-muted-foreground">Pincode</label>
-                        <input type="text" required value={newAddress.pincode} onChange={e => setNewAddress({...newAddress, pincode: e.target.value})} className="admin-input mt-1" />
+                        <input
+                          type="text"
+                          required
+                          value={newAddress.pincode}
+                          onChange={(e) =>
+                            setNewAddress({ ...newAddress, pincode: e.target.value })
+                          }
+                          className="admin-input mt-1"
+                        />
                       </div>
                     </div>
                     <div className="flex items-center gap-2 mt-4 pt-2">
-                      <input 
-                        type="checkbox" 
-                        id="defaultAddress" 
+                      <input
+                        type="checkbox"
+                        id="defaultAddress"
                         checked={newAddress.isDefault}
-                        onChange={e => setNewAddress({...newAddress, isDefault: e.target.checked})}
+                        onChange={(e) =>
+                          setNewAddress({ ...newAddress, isDefault: e.target.checked })
+                        }
                         className="rounded border-border/50 bg-white/5"
                       />
-                      <label htmlFor="defaultAddress" className="text-sm cursor-pointer">Set as default address</label>
+                      <label htmlFor="defaultAddress" className="text-sm cursor-pointer">
+                        Set as default address
+                      </label>
                     </div>
                     <div className="flex justify-end gap-3 pt-4 border-t border-border/50">
-                      <button type="button" onClick={() => setIsAddingAddress(false)} className="px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/5 transition-colors">
+                      <button
+                        type="button"
+                        onClick={() => setIsAddingAddress(false)}
+                        className="px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/5 transition-colors"
+                      >
                         Cancel
                       </button>
-                      <button type="submit" className="px-4 py-2 rounded-xl bg-primary text-background text-sm font-semibold hover:bg-primary/90 transition-colors">
+                      <button
+                        type="submit"
+                        className="px-4 py-2 rounded-xl bg-primary text-background text-sm font-semibold hover:bg-primary/90 transition-colors"
+                      >
                         Save Address
                       </button>
                     </div>
