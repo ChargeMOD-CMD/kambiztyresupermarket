@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Phone, Shield, Star, Zap } from "lucide-react";
 import heroBg from "@/assets/hero-bg-new.png";
-import realTyre from "@/assets/tyre-hero-black.png";
+import realTyre from "@/assets/tyre-hero-kambiz.png";
 import { useTheme } from "@/hooks/useTheme";
+
 
 /* ── Floating badge data ──────────────────────────── */
 const floatingBadges = [

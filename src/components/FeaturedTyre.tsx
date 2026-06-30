@@ -16,7 +16,7 @@ import { addToCart } from "@/lib/shopStore";
 import { useShop } from "@/lib/useShop";
 import { useState } from "react";
 import heroBg from "@/assets/hero-bg-new.png";
-import tyreHero from "@/assets/tyre-featured-black.png";
+import tyreHero from "@/assets/tyre-hero-kambiz.png";
 import gaugeImg from "@/assets/tyre-pressure-gauge.png";
 import inflatorImg from "@/assets/tyre-inflator.png";
 import rimImg from "@/assets/alloy-rim.png";
