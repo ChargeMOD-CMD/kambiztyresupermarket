@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Menu, X, Phone, ShoppingCart, User } from "lucide-react";
+import { Menu, X, Phone, ShoppingCart, User, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useShop } from "@/lib/useShop";
+import { useTheme } from "@/hooks/useTheme";
 
 const links = [
   { to: "/", label: "Home" },
@@ -18,6 +19,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const { cartItemsCount } = useShop();
+  const { toggle, isDark } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -83,6 +85,40 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
+            {/* Day / Night toggle */}
+            <button
+              onClick={toggle}
+              id="header-theme-toggle"
+              aria-label={isDark ? "Switch to day mode" : "Switch to night mode"}
+              title={isDark ? "Day mode" : "Night mode"}
+              className="relative grid place-items-center h-10 w-10 rounded-full glass hover:bg-white/5 transition-colors overflow-hidden"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {isDark ? (
+                  <motion.span
+                    key="sun"
+                    initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                    transition={{ duration: 0.25 }}
+                    className="absolute"
+                  >
+                    <Sun className="h-5 w-5 text-amber-400" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="moon"
+                    initial={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                    transition={{ duration: 0.25 }}
+                    className="absolute"
+                  >
+                    <Moon className="h-5 w-5 text-indigo-500" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
             <Link
               to="/cart"
               className="relative grid place-items-center h-10 w-10 rounded-full glass hover:bg-white/5 transition-colors"

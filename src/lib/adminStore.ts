@@ -53,7 +53,7 @@ export interface Product {
   id: string;
   name: string;
   brand: string;
-  category: "Car" | "SUV" | "Truck" | "Bike" | "Commercial" | "Accessories";
+  category: "Car" | "Bike";
   size: string;
   loadIndex: string;
   season: string;
@@ -71,6 +71,9 @@ export interface Product {
   modelNumber: string;
   warranty: string;
   vehicleCompatibility: string[];
+  vehicleBrands: string; // e.g. "Toyota, Honda"
+  vehicleNames: string; // e.g. "Fortuner, City"
+  fuelType?: string; // e.g. "Petrol, Diesel, Electric"
   technicalSpecs: Record<string, string>;
   rating: number;
   reviewsCount: number;
@@ -124,8 +127,8 @@ function getImageDataUrl(src: string): string {
 export const DEFAULT_PRODUCTS: Product[] = [
   {
     id: "default-1",
-    name: "Passenger Car Tyres",
-    brand: "Kambiz Select",
+    name: "Standard Car Tyres",
+    brand: "MRF",
     category: "Car",
     size: '13" – 19"',
     loadIndex: "91 W",
@@ -145,6 +148,9 @@ export const DEFAULT_PRODUCTS: Product[] = [
     modelNumber: "KS-100",
     warranty: "3 Years Manufacturer Warranty",
     vehicleCompatibility: ["Hatchbacks", "Sedans", "Compact SUVs"],
+    vehicleBrands: "Honda, Hyundai, Maruti Suzuki",
+    vehicleNames: "City, i20, Swift",
+    fuelType: "Petrol, Diesel",
     technicalSpecs: {
       "Speed Rating": "W (Up to 270 km/h)",
       "Tread Depth": "8 mm",
@@ -158,8 +164,8 @@ export const DEFAULT_PRODUCTS: Product[] = [
   {
     id: "default-2",
     name: "SUV & 4x4 Tyres",
-    brand: "Kambiz Pro",
-    category: "SUV",
+    brand: "Apollo",
+    category: "Car",
     size: "265/65 R17",
     loadIndex: "112 H",
     season: "All-Terrain",
@@ -177,6 +183,9 @@ export const DEFAULT_PRODUCTS: Product[] = [
     modelNumber: "KP-200",
     warranty: "5 Years Manufacturer Warranty",
     vehicleCompatibility: ["Toyota Fortuner", "Ford Endeavour", "Mahindra Thar"],
+    vehicleBrands: "Toyota, Ford, Mahindra",
+    vehicleNames: "Fortuner, Endeavour, Thar",
+    fuelType: "Diesel",
     technicalSpecs: {
       "Speed Rating": "H (Up to 210 km/h)",
       "Ply Rating": "8 PR",
@@ -189,26 +198,29 @@ export const DEFAULT_PRODUCTS: Product[] = [
   },
   {
     id: "default-3",
-    name: "Commercial & Truck",
-    brand: "Kambiz Heavy",
-    category: "Truck",
-    size: "315/80 R22.5",
-    loadIndex: "154 M",
+    name: "Performance Bike Tyres",
+    brand: "Michelin",
+    category: "Bike",
+    size: "140/70 R17",
+    loadIndex: "66 H",
     season: "All-Season",
     price: 18500,
     originalPrice: 24000,
     discount: 22,
     tag: "Built to Endure",
-    spec: "Heavy Load • Long Haul",
-    description: "Heavy-duty commercial tyres engineered for maximum load capacity and durability.",
+    spec: "Sport • High Grip",
+    description: "High-performance motorcycle tyres engineered for maximum cornering grip and durability.",
     image: truckImg,
     gallery: [truckImg],
     inStock: true,
     stockCount: 20,
-    sku: "KMBZ-TRK-300",
+    sku: "KMBZ-BIKE-300",
     modelNumber: "KH-300",
     warranty: "1 Year Replacement Warranty",
-    vehicleCompatibility: ["Heavy Duty Trucks", "Buses", "Trailers"],
+    vehicleCompatibility: ["Sports Bikes", "Cruisers"],
+    vehicleBrands: "Yamaha, Royal Enfield, KTM",
+    vehicleNames: "R15, Classic 350, Duke 390",
+    fuelType: "Petrol",
     technicalSpecs: {
       "Speed Rating": "M (Up to 130 km/h)",
       "Load Capacity": "3750 kg per tyre",

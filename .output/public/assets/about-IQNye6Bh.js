@@ -1,0 +1,1 @@
+import{c as e}from"./useRouter-CAeNMlbO.js";import{t}from"./About-AMHthdzs.js";import{n,t as r}from"./Footer-DMRPaKDz.js";var i=e();function a(){return(0,i.jsxs)(`main`,{className:`relative overflow-x-hidden`,children:[(0,i.jsx)(n,{}),(0,i.jsx)(`div`,{className:`pt-28`,children:(0,i.jsx)(t,{})}),(0,i.jsx)(r,{})]})}export{a as component};

@@ -23,7 +23,7 @@ export const Route = createFileRoute("/admin/products_/add")({
   component: AddProduct,
 });
 
-const CATEGORIES = ["Car", "SUV", "Truck", "Bike", "Commercial", "Accessories"] as const;
+const CATEGORIES = ["Car", "Bike"] as const;
 const SEASONS = ["All-Season", "Summer", "Winter", "All-Terrain"];
 const TAGS = [
   "Everyday Performance",
@@ -59,6 +59,8 @@ const EMPTY: Partial_Product = {
   modelNumber: "",
   warranty: "1 Year Warranty",
   vehicleCompatibility: [],
+  vehicleBrands: "",
+  vehicleNames: "",
   technicalSpecs: {},
   rating: 5.0,
   reviewsCount: 0,
@@ -191,12 +193,12 @@ function AddProduct() {
                     onChange={(e) => set("name", e.target.value)}
                   />
                 </Field>
-                <Field label="Brand" id="prod-brand">
+                <Field label="Tyre Brand Name" id="prod-brand">
                   <input
                     id="prod-brand"
                     required
                     className="admin-input"
-                    placeholder="e.g. Bridgestone"
+                    placeholder="e.g. MRF, Apollo, Bridgestone"
                     value={form.brand}
                     onChange={(e) => set("brand", e.target.value)}
                   />
@@ -287,6 +289,39 @@ function AddProduct() {
                       <option key={s}>{s}</option>
                     ))}
                   </select>
+                </Field>
+              </div>
+            </FormSection>
+
+            {/* Vehicle Fitment */}
+            <FormSection title="Vehicle Fitment Filters" icon={Package}>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <Field label="Selected Vehicles Name Brands" id="prod-vbrands" hint="Comma separated (e.g. Toyota, Honda)">
+                  <input
+                    id="prod-vbrands"
+                    className="admin-input"
+                    placeholder="Toyota, Honda"
+                    value={form.vehicleBrands}
+                    onChange={(e) => set("vehicleBrands", e.target.value)}
+                  />
+                </Field>
+                <Field label="Selected Vehicles Name" id="prod-vnames" hint="Comma separated (e.g. Fortuner, City)">
+                  <input
+                    id="prod-vnames"
+                    className="admin-input"
+                    placeholder="Fortuner, City"
+                    value={form.vehicleNames}
+                    onChange={(e) => set("vehicleNames", e.target.value)}
+                  />
+                </Field>
+                <Field label="Fuel Type" id="prod-fuel" hint="Comma separated (e.g. Petrol, Diesel, Electric)">
+                  <input
+                    id="prod-fuel"
+                    className="admin-input"
+                    placeholder="Petrol, Diesel, Electric"
+                    value={form.fuelType || ""}
+                    onChange={(e) => set("fuelType", e.target.value)}
+                  />
                 </Field>
               </div>
             </FormSection>

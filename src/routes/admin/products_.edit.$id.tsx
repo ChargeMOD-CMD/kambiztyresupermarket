@@ -21,7 +21,7 @@ export const Route = createFileRoute("/admin/products_/edit/$id")({
   component: EditProduct,
 });
 
-const CATEGORIES = ["Car", "SUV", "Truck", "Bike", "Commercial", "Accessories"] as const;
+const CATEGORIES = ["Car", "Bike"] as const;
 const SEASONS = ["All-Season", "Summer", "Winter", "All-Terrain"];
 const TAGS = [
   "Everyday Performance",
@@ -181,12 +181,13 @@ function EditProduct() {
                     onChange={(e) => set("name", e.target.value)}
                   />
                 </Field>
-                <Field label="Brand" id="edit-brand">
+                <Field label="Tyre Brand Name" id="edit-brand">
                   <input
                     id="edit-brand"
                     required
                     className="admin-input"
-                    value={form.brand}
+                    placeholder="e.g. MRF, Apollo, Bridgestone"
+                    value={form.brand || ""}
                     onChange={(e) => set("brand", e.target.value)}
                   />
                 </Field>
@@ -267,6 +268,38 @@ function EditProduct() {
                       <option key={s}>{s}</option>
                     ))}
                   </select>
+                </Field>
+              </div>
+            </FormSection>
+            {/* Vehicle Fitment */}
+            <FormSection title="Vehicle Fitment Filters" icon={Package}>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <Field label="Selected Vehicles Name Brands" id="edit-vbrands" hint="Comma separated (e.g. Toyota, Honda)">
+                  <input
+                    id="edit-vbrands"
+                    className="admin-input"
+                    placeholder="Toyota, Honda"
+                    value={form.vehicleBrands || ""}
+                    onChange={(e) => set("vehicleBrands", e.target.value)}
+                  />
+                </Field>
+                <Field label="Selected Vehicles Name" id="edit-vnames" hint="Comma separated (e.g. Fortuner, City)">
+                  <input
+                    id="edit-vnames"
+                    className="admin-input"
+                    placeholder="Fortuner, City"
+                    value={form.vehicleNames || ""}
+                    onChange={(e) => set("vehicleNames", e.target.value)}
+                  />
+                </Field>
+                <Field label="Fuel Type" id="edit-fuel" hint="Comma separated (e.g. Petrol, Diesel, Electric)">
+                  <input
+                    id="edit-fuel"
+                    className="admin-input"
+                    placeholder="Petrol, Diesel, Electric"
+                    value={form.fuelType || ""}
+                    onChange={(e) => set("fuelType", e.target.value)}
+                  />
                 </Field>
               </div>
             </FormSection>

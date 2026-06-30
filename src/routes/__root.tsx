@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 import AuthModal from "@/components/AuthModal";
 import { Toaster, toast } from "sonner";
+import { useTheme } from "@/hooks/useTheme";
 
 import appCss from "../styles.css?url";
 
@@ -86,9 +87,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
+        {/* Prevent flash: apply saved theme before paint */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){
+  var t=localStorage.getItem('kambiz-theme')||'dark';
+  document.documentElement.className=t;
+})();`,
+          }}
+        />
       </head>
       <body>
         {children}
@@ -100,6 +110,8 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // Mount theme hook at root so it syncs across all routes
+  useTheme();
 
   useEffect(() => {
     const handleNotification = (e: any) => {

@@ -12,10 +12,21 @@ import {
   ShieldAlert,
   CheckCircle,
   XCircle,
+  LayoutGrid,
+  List,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
+interface ProductSearch {
+  brand?: string;
+}
+
 export const Route = createFileRoute("/admin/products")({
+  validateSearch: (search: Record<string, unknown>): ProductSearch => {
+    return {
+      brand: typeof search.brand === "string" ? search.brand : undefined,
+    };
+  },
   component: AdminProducts,
 });
 
@@ -45,11 +56,17 @@ function AccessDenied() {
 
 function AdminProducts() {
   const { hasPermission } = useAdminAuth();
+  const searchParams = Route.useSearch();
   const [products, setProducts] = useState<Product[]>([]);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(searchParams.brand ?? "");
   const [catFilter, setCatFilter] = useState("All");
   const [stockFilter, setStockFilter] = useState("All");
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
+
+  useEffect(() => {
+    setSearch(searchParams.brand ?? "");
+  }, [searchParams.brand]);
 
   useEffect(() => {
     setProducts(getProducts());
@@ -78,7 +95,7 @@ function AdminProducts() {
     return matchCat && matchSearch && matchStock;
   });
 
-  const categories = ["All", "Car", "SUV", "Truck", "Bike", "Commercial"];
+  const categories = ["All", "Car", "Bike"];
 
   return (
     <AdminLayout>
@@ -141,6 +158,23 @@ function AdminProducts() {
             </button>
           ))}
         </div>
+        {/* View Toggle */}
+        <div className="flex bg-surface/50 rounded-xl p-1 border border-border shrink-0 ml-auto sm:ml-0">
+          <button
+            onClick={() => setViewMode("list")}
+            className={`p-1.5 rounded-lg transition-colors ${viewMode === "list" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+            title="List View"
+          >
+            <List className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`p-1.5 rounded-lg transition-colors ${viewMode === "grid" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+            title="Grid View"
+          >
+            <LayoutGrid className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       {/* Table */}
@@ -161,7 +195,7 @@ function AdminProducts() {
               </Link>
             )}
           </div>
-        ) : (
+        ) : viewMode === "list" ? (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -252,6 +286,59 @@ function AdminProducts() {
                 ))}
               </tbody>
             </table>
+          </div>
+        ) : (
+          <div className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {filtered.map((product) => (
+              <div key={product.id} className="group relative flex flex-col rounded-2xl border border-border bg-surface/20 p-3 transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1">
+                 {/* Product Image & Stock */}
+                 <div className="relative aspect-square overflow-hidden rounded-xl bg-surface mb-3">
+                   <img src={product.image} alt={product.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                   {product.inStock ? (
+                      <span className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-400 backdrop-blur-md">
+                        <CheckCircle className="h-3 w-3" /> In Stock
+                      </span>
+                    ) : (
+                      <span className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-black/40 border border-border px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-md">
+                        <XCircle className="h-3 w-3" /> Out of Stock
+                      </span>
+                    )}
+                 </div>
+                 {/* Category & Price */}
+                 <div className="flex items-center justify-between mb-2">
+                    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold ${CATEGORY_COLORS[product.category] ?? "bg-secondary text-foreground border-border"}`}>
+                      {product.category}
+                    </span>
+                    <span className="font-bold text-primary">{product.price}</span>
+                 </div>
+                 {/* Info */}
+                 <div className="font-semibold text-sm truncate">{product.name}</div>
+                 <div className="text-xs text-muted-foreground truncate">{product.brand} • {product.size}</div>
+                 
+                 {/* Actions overlay */}
+                 <div className="absolute inset-0 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 rounded-2xl">
+                    {hasPermission("products.edit") && (
+                      <Link
+                        to="/admin/products/edit/$id"
+                        params={{ id: product.id }}
+                        className="rounded-xl bg-primary text-primary-foreground p-3 hover:scale-105 transition-transform shadow-glow"
+                        title="Edit"
+                      >
+                        <Pencil className="h-5 w-5" />
+                      </Link>
+                    )}
+                    {hasPermission("products.delete") && (
+                      <button
+                        onClick={() => setDeleteId(product.id)}
+                        className="rounded-xl bg-destructive text-destructive-foreground p-3 hover:scale-105 transition-transform shadow-lg"
+                        title="Delete"
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </button>
+                    )}
+                 </div>
+              </div>
+            ))}
           </div>
         )}
       </motion.div>
