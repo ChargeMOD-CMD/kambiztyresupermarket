@@ -78,7 +78,7 @@ function ProductCard({ p, i }: { p: Product; i: number }) {
             className="mt-4 btn-hero text-sm w-full inline-flex justify-center items-center gap-1.5"
             id={`product-open-${p.id}`}
           >
-            <Eye className="h-4 w-4" /> View Product
+            <Eye className="h-4 w-4" /> Buy Now
           </Link>
         )}
       </div>
@@ -270,14 +270,16 @@ export default function Products() {
           </div>
         )}
 
-        {/* Regular Products Grid */}
-        <div className="mt-14 grid md:grid-cols-3 gap-6">
-          {filteredProducts
-            .filter((p) => !p.featured)
-            .map((p, i) => (
-              <ProductCard key={p.id} p={p} i={i} />
-            ))}
-        </div>
+        {/* All Products Grid (Products Page Only) */}
+        {isProductsPage && (
+          <div className="mt-14 grid md:grid-cols-3 gap-6">
+            {filteredProducts
+              .filter((p) => !p.featured)
+              .map((p, i) => (
+                <ProductCard key={p.id} p={p} i={i} />
+              ))}
+          </div>
+        )}
 
         {filteredProducts.length === 0 && (
           <div className="mt-14 py-20 text-center rounded-3xl glass border border-border/50">
