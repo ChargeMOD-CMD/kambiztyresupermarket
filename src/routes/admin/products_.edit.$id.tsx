@@ -15,6 +15,7 @@ import {
   Package,
   Ruler,
   BadgeDollarSign,
+  Plus,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/products_/edit/$id")({
@@ -33,6 +34,12 @@ const TAGS = [
   "Sport Max",
   "Budget Pick",
 ];
+
+const CAR_BRANDS = ["Maruti Suzuki", "Hyundai", "Tata", "Mahindra", "Kia", "Toyota", "Honda", "MG", "Volkswagen", "Skoda", "Renault", "Nissan"];
+const BIKE_BRANDS = ["Hero", "Honda Bike", "TVS", "Bajaj", "Royal Enfield", "Yamaha", "Suzuki Bike", "KTM", "Ather", "Ola"];
+const CAR_NAMES = ["Swift", "Baleno", "WagonR", "Alto", "Dzire", "Creta", "Venue", "i20", "Nexon", "Punch", "Harrier", "Scorpio", "Thar", "XUV700", "Seltos", "Sonet", "Innova", "Fortuner", "City", "Amaze", "Slavia", "Kushaq", "Taigun", "Virtus"];
+const BIKE_NAMES = ["Splendor", "Activa", "CB Shine", "Jupiter", "Apache", "Pulsar", "Classic 350", "Bullet 350", "MT-15", "R15", "Access", "Burgman", "Duke 390", "Ather 450X", "Ola S1"];
+const FUEL_TYPES = ["Petrol", "Diesel", "CNG", "Electric", "Hybrid"];
 
 type Partial_Product = Omit<Product, "id" | "createdAt">;
 
@@ -78,6 +85,100 @@ function Field({
       {children}
       {hint && <p className="text-[11px] text-muted-foreground">{hint}</p>}
     </div>
+  );
+}
+
+function VehicleFilterField({ 
+  label, 
+  options,
+  value,
+  onChange,
+  hint 
+}: { 
+  label: string; 
+  options: {group: string, items: string[]}[]; 
+  value: string; 
+  onChange: (v: string) => void;
+  hint: string;
+}) {
+  const selected = value ? value.split(',').map(s => s.trim()).filter(Boolean) : [];
+  
+  const handleToggle = (item: string) => {
+    if (selected.includes(item)) {
+      onChange(selected.filter(x => x !== item).join(', '));
+    } else {
+      onChange([...selected, item].join(', '));
+    }
+  };
+
+  const handleAdd = (item: string) => {
+    if (!selected.includes(item)) {
+      onChange([...selected, item].join(', '));
+    }
+  }
+
+  return (
+    <Field label={label} hint={hint}>
+      <div className="space-y-3">
+        <div className="max-h-52 overflow-y-auto space-y-4 border border-border rounded-xl p-3 bg-surface/20">
+          {options.map(opt => (
+            <div key={opt.group} className="space-y-1.5">
+              <div className="text-[11px] font-bold text-muted-foreground uppercase">{opt.group}</div>
+              <div className="grid grid-cols-2 gap-1.5">
+                {opt.items.map(item => (
+                  <label key={item} className="flex items-center gap-2 text-sm cursor-pointer hover:bg-surface/50 p-1 rounded-md transition-colors">
+                    <input 
+                      type="checkbox" 
+                      checked={selected.includes(item)} 
+                      onChange={() => handleToggle(item)}
+                      className="rounded border-border text-primary focus:ring-primary h-3.5 w-3.5"
+                    />
+                    <span className="truncate" title={item}>{item}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <input 
+            className="admin-input flex-1 h-9 text-sm" 
+            placeholder="Add custom..."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleAdd(e.currentTarget.value.trim());
+                e.currentTarget.value = '';
+              }
+            }}
+          />
+          <button 
+            type="button"
+            className="h-9 w-9 flex items-center justify-center rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-colors shrink-0"
+            onClick={(e) => {
+              const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+              if (input.value.trim()) {
+                handleAdd(input.value.trim());
+                input.value = "";
+              }
+            }}
+            title="Add another vehicle"
+          >
+            <Plus className="h-4 w-4" />
+          </button>
+        </div>
+        {selected.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {selected.map(item => (
+              <span key={item} className="inline-flex items-center gap-1 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-md">
+                {item}
+                <X className="h-3 w-3 cursor-pointer hover:text-destructive" onClick={() => handleToggle(item)} />
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </Field>
   );
 }
 
@@ -271,38 +372,42 @@ function EditProduct() {
                 </Field>
               </div>
             </FormSection>
+            
             {/* Vehicle Fitment */}
             <FormSection title="Vehicle Fitment Filters" icon={Package}>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <Field label="Selected Vehicles Name Brands" id="edit-vbrands" hint="Comma separated (e.g. Toyota, Honda)">
-                  <input
-                    id="edit-vbrands"
-                    className="admin-input"
-                    placeholder="Toyota, Honda"
-                    value={form.vehicleBrands || ""}
-                    onChange={(e) => set("vehicleBrands", e.target.value)}
-                  />
-                </Field>
-                <Field label="Selected Vehicles Name" id="edit-vnames" hint="Comma separated (e.g. Fortuner, City)">
-                  <input
-                    id="edit-vnames"
-                    className="admin-input"
-                    placeholder="Fortuner, City"
-                    value={form.vehicleNames || ""}
-                    onChange={(e) => set("vehicleNames", e.target.value)}
-                  />
-                </Field>
-                <Field label="Fuel Type" id="edit-fuel" hint="Comma separated (e.g. Petrol, Diesel, Electric)">
-                  <input
-                    id="edit-fuel"
-                    className="admin-input"
-                    placeholder="Petrol, Diesel, Electric"
-                    value={form.fuelType || ""}
-                    onChange={(e) => set("fuelType", e.target.value)}
-                  />
-                </Field>
+              <div className="grid lg:grid-cols-3 gap-6">
+                <VehicleFilterField 
+                  label="Selected Vehicles Name Brands" 
+                  hint="Check boxes or type to add custom"
+                  options={[
+                    { group: "Cars", items: CAR_BRANDS },
+                    { group: "Bikes", items: BIKE_BRANDS }
+                  ]}
+                  value={form.vehicleBrands || ""}
+                  onChange={(val) => set("vehicleBrands", val)}
+                />
+                <VehicleFilterField 
+                  label="Selected Vehicles Name" 
+                  hint="Check boxes or type to add custom"
+                  options={[
+                    { group: "Cars", items: CAR_NAMES },
+                    { group: "Bikes", items: BIKE_NAMES }
+                  ]}
+                  value={form.vehicleNames || ""}
+                  onChange={(val) => set("vehicleNames", val)}
+                />
+                <VehicleFilterField 
+                  label="Fuel Type" 
+                  hint="Check boxes or type to add custom"
+                  options={[
+                    { group: "Fuel Options", items: FUEL_TYPES }
+                  ]}
+                  value={form.fuelType || ""}
+                  onChange={(val) => set("fuelType", val)}
+                />
               </div>
             </FormSection>
+
             {/* Pricing */}
             <FormSection title="Pricing & Inventory" icon={BadgeDollarSign}>
               <div className="grid sm:grid-cols-2 gap-4">

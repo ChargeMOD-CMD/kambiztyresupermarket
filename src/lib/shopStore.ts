@@ -45,11 +45,23 @@ export interface Order {
   deliveryDate?: string;
 }
 
+export interface ServiceRequest {
+  id: string;
+  name: string;
+  phone: string;
+  vehicle: string;
+  service: string;
+  message: string;
+  date: string;
+  status: "Pending" | "In Progress" | "Completed" | "Cancelled";
+}
+
 const KEYS = {
   cart: "kambiz_cart",
   customers: "kambiz_customers",
   shopSession: "kambiz_shop_session",
   orders: "kambiz_orders",
+  requests: "kambiz_requests",
 };
 
 // ── Cart Management ──
@@ -244,4 +256,46 @@ export function updateOrderStatus(orderId: string, status: Order["orderStatus"])
 export function deleteOrder(orderId: string) {
   const orders = getOrders();
   saveOrders(orders.filter((o) => o.id !== orderId));
+}
+
+// ── Service Requests ──
+
+export function getRequests(): ServiceRequest[] {
+  try {
+    const raw = localStorage.getItem(KEYS.requests);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveRequests(requests: ServiceRequest[]) {
+  localStorage.setItem(KEYS.requests, JSON.stringify(requests));
+  window.dispatchEvent(new StorageEvent("storage", { key: KEYS.requests }));
+}
+
+export function addRequest(request: Omit<ServiceRequest, "id" | "date" | "status">): ServiceRequest {
+  const requests = getRequests();
+  const newRequest: ServiceRequest = {
+    ...request,
+    id: `REQ-${Date.now().toString().slice(-6)}`,
+    date: new Date().toISOString(),
+    status: "Pending",
+  };
+  saveRequests([newRequest, ...requests]);
+  return newRequest;
+}
+
+export function updateRequestStatus(id: string, status: ServiceRequest["status"]) {
+  const requests = getRequests();
+  const index = requests.findIndex((r) => r.id === id);
+  if (index !== -1) {
+    requests[index].status = status;
+    saveRequests(requests);
+  }
+}
+
+export function deleteRequest(id: string) {
+  const requests = getRequests();
+  saveRequests(requests.filter((r) => r.id !== id));
 }

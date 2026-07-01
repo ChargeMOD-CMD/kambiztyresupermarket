@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Send } from "lucide-react";
 import { useState } from "react";
+import { addRequest } from "@/lib/shopStore";
 
 export default function Contact() {
   const [sent, setSent] = useState(false);
@@ -68,6 +69,21 @@ export default function Contact() {
               viewport={{ once: true }}
               onSubmit={(e) => {
                 e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const name = formData.get("name") as string;
+                const phone = formData.get("phone") as string;
+                const vehicle = formData.get("vehicle") as string;
+                const service = formData.get("service") as string;
+                const message = formData.get("message") as string;
+
+                addRequest({
+                  name: name || "",
+                  phone: phone || "",
+                  vehicle: vehicle || "",
+                  service: service || "",
+                  message: message || ""
+                });
+                
                 setSent(true);
               }}
               className="glass rounded-2xl p-6 sm:p-8 space-y-4"
@@ -79,15 +95,33 @@ export default function Contact() {
               <Field label="Vehicle" name="vehicle" placeholder="e.g. Maruti Swift 2021" />
               <div>
                 <label className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                  Type of Services
+                </label>
+                <select
+                  name="service"
+                  className="mt-2 w-full rounded-xl bg-background/50 border border-border px-4 py-3 outline-none focus:border-primary transition-colors"
+                  defaultValue=""
+                >
+                  <option value="" disabled>Select a service</option>
+                  <option value="Wheel Alignment">Wheel Alignment</option>
+                  <option value="Tyre Change">Tyre Change</option>
+                  <option value="Tyre Resolling">Tyre Resolling</option>
+                  <option value="Tyre Puncture">Tyre Puncture</option>
+                  <option value="Air Cabin Filter Replacement">Air Cabin Filter Replacement</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                   Message
                 </label>
                 <textarea
+                  name="message"
                   rows={4}
                   placeholder="How can we help?"
                   className="mt-2 w-full rounded-xl bg-background/50 border border-border px-4 py-3 outline-none focus:border-primary transition-colors resize-none"
                 />
               </div>
-              <button type="submit" className="btn-hero w-full">
+              <button type="submit" disabled={sent} className="btn-hero w-full disabled:opacity-50 disabled:cursor-not-allowed">
                 {sent ? (
                   "We'll be in touch ✓"
                 ) : (

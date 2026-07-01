@@ -14,8 +14,8 @@ import {
   ShoppingCart,
   UserCheck,
   Sun,
-  Moon,
   ChevronDown,
+  MessageSquare,
 } from "lucide-react";
 import { useState } from "react";
 import type { ReactNode } from "react";
@@ -23,6 +23,7 @@ import type { ReactNode } from "react";
 const navItems = [
   { to: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
+  { to: "/admin/requests", label: "Requests", icon: MessageSquare },
   { 
     label: "Inventory", 
     icon: Package, 
